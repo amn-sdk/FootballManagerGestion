@@ -4,7 +4,7 @@ from sqlmodel import SQLModel
 from app.core.config import settings
 from app.db.session import engine
 from app.api import auth
-from app.api.routers import players
+from app.api.routers import players, events, matches
 from app.models import models # Import models to register them with SQLModel
 
 @asynccontextmanager
@@ -21,6 +21,8 @@ app = FastAPI(
 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(players.router, prefix="/players", tags=["players"])
+app.include_router(events.router, prefix="/events", tags=["events"])
+app.include_router(matches.router, prefix="/matches", tags=["matches"])
 
 @app.get("/")
 def root():
