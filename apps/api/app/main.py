@@ -4,7 +4,7 @@ from sqlmodel import SQLModel
 from app.core.config import settings
 from app.db.session import engine
 from app.api import auth
-from app.api.routers import players, events, matches, finance, licenses, inventory
+from app.api.routers import players, events, matches, finance, licenses, inventory, ai
 from app.models import models # Import models to register them with SQLModel
 
 @asynccontextmanager
@@ -26,6 +26,7 @@ app.include_router(matches.router, prefix="/matches", tags=["matches"])
 app.include_router(finance.router, prefix="/finance", tags=["finance"])
 app.include_router(licenses.router, prefix="/licenses", tags=["licenses"])
 app.include_router(inventory.router, prefix="/inventory", tags=["inventory"])
+app.include_router(ai.router, prefix="/ai", tags=["ai"])
 
 @app.get("/")
 def root():

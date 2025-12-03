@@ -80,7 +80,9 @@ class Player(SQLModel, table=True):
     match_stats: List["MatchLineup"] = Relationship(back_populates="player")
     license: Optional["License"] = Relationship(back_populates="player")
     payment_assignments: List["PlayerPaymentAssignment"] = Relationship(back_populates="player")
+    payment_assignments: List["PlayerPaymentAssignment"] = Relationship(back_populates="player")
     injuries: List["Injury"] = Relationship(back_populates="player")
+    rpe_entries: List["RpeEntry"] = Relationship(back_populates="player")
 
 class EventType(str, Enum):
     TRAINING = "TRAINING"
@@ -99,7 +101,9 @@ class Event(SQLModel, table=True):
     
     team: Team = Relationship(back_populates="events")
     attendances: List["EventAttendance"] = Relationship(back_populates="event")
+    attendances: List["EventAttendance"] = Relationship(back_populates="event")
     match_details: Optional["Match"] = Relationship(back_populates="event")
+    rpe_entries: List["RpeEntry"] = Relationship(back_populates="event")
 
 class AttendanceStatus(str, Enum):
     PRESENT = "PRESENT"
@@ -297,3 +301,17 @@ class Document(SQLModel, table=True):
 
     team: Team = Relationship(back_populates="documents")
     uploader: User = Relationship(back_populates="documents")
+
+class RpeEntry(SQLModel, table=True):
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    event_id: UUID = Field(foreign_key="event.id")
+    player_id: UUID = Field(foreign_key="player.id")
+    rpe_value: int # 1-10
+    comment: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    # Computed load (rpe * minutes) could be stored or computed on fly
+    # For simplicity, we'll compute it on the fly or add a field if needed later
+
+    event: Event = Relationship(back_populates="rpe_entries")
+    player: Player = Relationship(back_populates="rpe_entries")
