@@ -19,31 +19,33 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Session = D
     access_token = create_access_token(subject=user.id)
     return {"access_token": access_token, "token_type": "bearer"}
 
+from pydantic import BaseModel
+
+class UserCreate(BaseModel):
+    email: str
+    password: str
+    first_name: str
+    last_name: str
+    club_name: str
+
 @router.post("/register")
-def register(
-    email: str, 
-    password: str, 
-    first_name: str, 
-    last_name: str, 
-    club_name: str,
-    session: Session = Depends(get_session)
-):
+def register(user_in: UserCreate, session: Session = Depends(get_session)):
     # Check if user exists
-    existing_user = session.exec(select(User).where(User.email == email)).first()
+    existing_user = session.exec(select(User).where(User.email == user_in.email)).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     
     # Create User
     user = User(
-        email=email,
-        hashed_password=get_password_hash(password),
-        first_name=first_name,
-        last_name=last_name
+        email=user_in.email,
+        hashed_password=get_password_hash(user_in.password),
+        first_name=user_in.first_name,
+        last_name=user_in.last_name
     )
     session.add(user)
     
     # Create Club
-    club = Club(name=club_name)
+    club = Club(name=user_in.club_name)
     session.add(club)
     session.commit() # Commit to get IDs
     session.refresh(user)

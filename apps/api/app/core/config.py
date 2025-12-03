@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
@@ -8,11 +8,11 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8 # 8 days
     
     # Database
-    POSTGRES_SERVER: str = "localhost"
+    POSTGRES_SERVER: str = "localhost:5433"
     POSTGRES_USER: str = "postgres"
     POSTGRES_PASSWORD: str = "password"
     POSTGRES_DB: str = "football_manager"
-    DATABASE_URL: str | None = None
+    DATABASE_URL: Optional[str] = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

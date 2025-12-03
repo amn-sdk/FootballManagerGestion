@@ -1,22 +1,17 @@
 # Football Manager
 
-A professional-grade SaaS tool for amateur football clubs.
+Application de gestion de club de football amateur (SaaS).
 
-## Structure
+## Structure du Projet
 
-- `apps/web`: Next.js Frontend
-- `apps/api`: FastAPI Backend
-- `infra`: Infrastructure configuration (Docker)
+- `apps/web` : Frontend (Next.js 15, React, Tailwind)
+- `apps/api` : Backend (FastAPI, SQLModel, PostgreSQL)
+- `infra` : Infrastructure (Docker Compose)
 
-## Getting Started
+## Pré-requis
 
-### Prerequisites
-- Docker & Docker Compose
-- Node.js 20+
+- Node.js 18+
 - Python 3.11+
-- Poetry (optional, but recommended for Python)
-
-### Database
 Start the database:
 ```bash
 docker-compose -f infra/docker-compose.yml up -d
